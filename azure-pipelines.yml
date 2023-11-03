@@ -20,7 +20,7 @@ jobs:
       addToPath: true
  
   - script: |
-      choco install ue4
+      choco install ue5
     displayName: 'Install Unreal Engine'
  
   - script: |
