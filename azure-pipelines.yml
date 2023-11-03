@@ -1,0 +1,43 @@
+name: Unreal Engine Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  - job: Build
+    displayName: 'Build Job'
+    pool:
+      vmImage: 'windows-latest'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.x'
+          addToPath: true
+
+      - task: DownloadBuildArtifacts@0
+        displayName: 'Download Unreal Engine Installer'
+        inputs:
+          buildType: 'current'
+          downloadType: 'single'
+          artifactName: 'UnrealEngineInstaller'
+          downloadPath: '$(System.DefaultWorkingDirectory)/Installer'
+
+      - powershell: |
+          Start-Process -FilePath "$(System.DefaultWorkingDirectory)/Installer/UnrealEngineInstaller.exe" -ArgumentList "/S" -Wait
+        displayName: 'Install Unreal Engine'
+
+      - script: |
+          ue5 setroot "C:\Program Files\Epic Games\UE_5.1"
+        displayName: 'Set Unreal Engine Root'
+
+      - script: |
+          ue5 package project -pak -targetplatform=Win64 -clientconfig=Development -serverconfig=Development -archive -archivedirectory=$(Build.ArtifactStagingDirectory)
+        displayName: 'Build UE Project'
+
+      - task: PublishBuildArtifacts@1
+        displayName: 'Publish Artifact'
+        inputs:
+          pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+          artifactName: 'drop'
