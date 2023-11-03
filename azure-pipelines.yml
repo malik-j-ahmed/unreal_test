@@ -1,0 +1,34 @@
+trigger:
+- '*'
+ 
+pr:
+- '*'
+ 
+jobs:
+- job: Build
+  displayName: 'Build Job'
+  pool:
+    vmImage: 'windows-latest'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+ 
+  - script: |
+      choco install ue5
+    displayName: 'Install Unreal Engine 5.1'
+ 
+  - script: |
+      ue5 setroot C:\Program Files\Epic Games\UE_5.1
+    displayName: 'Set Unreal Engine 5.1 Root'
+ 
+  - script: |
+      ue5 package project -pak -targetplatform=Win64 -clientconfig=Development -serverconfig=Development -archive -archivedirectory=$(Build.ArtifactStagingDirectory)
+    displayName: 'Build UE Project'
+ 
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact'
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'drop'
