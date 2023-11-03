@@ -16,8 +16,7 @@ jobs:
       addToPath: true
  
   - script: |
-      choco upgrade chocolatey
-      choco install ue5
+      choco install unreal-linux-toolchain
     displayName: 'Install Unreal Engine 5.1'
  
   - script: |
