@@ -16,7 +16,8 @@ jobs:
       addToPath: true
  
   - script: |
-      choco install ue5 --pre
+      choco upgrade chocolatey
+      choco install ue5
     displayName: 'Install Unreal Engine 5.1'
  
   - script: |
