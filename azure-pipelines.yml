@@ -24,8 +24,8 @@ jobs:
     displayName: 'Set Unreal Engine 5.1 Root'
  
   - script: |
-      "%UE4_ROOT%\Engine\Build\BatchFiles\Build.bat" Editor Linux Development -WaitMutex
-    displayName: 'Build UE with Linux Toolchain'
+      C:\JenkinsBuildDirectory\Batch\TestBatch.bat
+    displayName: 'Run custom batch script'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
