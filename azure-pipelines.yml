@@ -20,13 +20,13 @@ jobs:
     displayName: 'Install Unreal Engine 5.1'
  
   - script: |
-      ue5 setroot C:\Program Files\Epic Games\UE_5.1
+      setx UE_ROOT "C:\Program Files\Epic Games\UE_5.1" /M
     displayName: 'Set Unreal Engine 5.1 Root'
  
   - script: |
-      ue5 package project -pak -targetplatform=Win64 -clientconfig=Development -serverconfig=Development -archive -archivedirectory=$(Build.ArtifactStagingDirectory)
-    displayName: 'Build UE Project'
- 
+      "%UE4_ROOT%\Engine\Build\BatchFiles\Build.bat" Editor Linux Development -WaitMutex
+    displayName: 'Build UE with Linux Toolchain'
+
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact'
     inputs:
